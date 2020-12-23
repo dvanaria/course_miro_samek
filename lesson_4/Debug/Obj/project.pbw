@@ -1,0 +1,86 @@
+[
+  {
+    "ID": "c:@p_enable_block",
+    "What": "Variable",
+    "defdec": "Def",
+    "display": "p_enable_block",
+    "location": {
+      "column": "15",
+      "line": "1",
+      "path": "C:\\cygwin\\home\\dvanaria\\Dropbox\\darron\\compsci\\sandbox\\embedded_programming\\2013_embedded_systems_programming_dr_miro_samek\\IAR_EWARM_projects\\lesson_4\\main.c"
+    },
+    "name": "p_enable_block",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@p_set_to_output",
+    "What": "Variable",
+    "defdec": "Def",
+    "display": "p_set_to_output",
+    "location": {
+      "column": "15",
+      "line": "2",
+      "path": "C:\\cygwin\\home\\dvanaria\\Dropbox\\darron\\compsci\\sandbox\\embedded_programming\\2013_embedded_systems_programming_dr_miro_samek\\IAR_EWARM_projects\\lesson_4\\main.c"
+    },
+    "name": "p_set_to_output",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@p_set_to_digital",
+    "What": "Variable",
+    "defdec": "Def",
+    "display": "p_set_to_digital",
+    "location": {
+      "column": "15",
+      "line": "3",
+      "path": "C:\\cygwin\\home\\dvanaria\\Dropbox\\darron\\compsci\\sandbox\\embedded_programming\\2013_embedded_systems_programming_dr_miro_samek\\IAR_EWARM_projects\\lesson_4\\main.c"
+    },
+    "name": "p_set_to_digital",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@p_LED_control",
+    "What": "Variable",
+    "defdec": "Def",
+    "display": "p_LED_control",
+    "location": {
+      "column": "15",
+      "line": "4",
+      "path": "C:\\cygwin\\home\\dvanaria\\Dropbox\\darron\\compsci\\sandbox\\embedded_programming\\2013_embedded_systems_programming_dr_miro_samek\\IAR_EWARM_projects\\lesson_4\\main.c"
+    },
+    "name": "p_LED_control",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:@F@main",
+    "What": "Function",
+    "defdec": "Def",
+    "display": "int main(void)",
+    "location": {
+      "column": "5",
+      "line": "6",
+      "path": "C:\\cygwin\\home\\dvanaria\\Dropbox\\darron\\compsci\\sandbox\\embedded_programming\\2013_embedded_systems_programming_dr_miro_samek\\IAR_EWARM_projects\\lesson_4\\main.c"
+    },
+    "name": "main",
+    "origin": "project_file",
+    "scope": null
+  },
+  {
+    "ID": "c:main.c@446@F@main@counter",
+    "What": "Variable",
+    "defdec": "Def",
+    "display": "counter",
+    "location": {
+      "column": "9",
+      "line": "12",
+      "path": "C:\\cygwin\\home\\dvanaria\\Dropbox\\darron\\compsci\\sandbox\\embedded_programming\\2013_embedded_systems_programming_dr_miro_samek\\IAR_EWARM_projects\\lesson_4\\main.c"
+    },
+    "name": "counter",
+    "origin": "project_file",
+    "scope": null
+  }
+]
