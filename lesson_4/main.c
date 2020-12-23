@@ -16,14 +16,14 @@ int main() {
          // turn on red LED
          counter = 0;
          *p_LED_control = 0x02U;
-         while( counter > 10000000 ) {
+         while( counter < 1000000 ) {
              ++counter;
          }
       
          // turn off red LED
          counter = 0;
          *p_LED_control = 0x00U;
-         while( counter > 10000000 ) {
+         while( counter < 1000000 ) {
              ++counter;
          }
     }

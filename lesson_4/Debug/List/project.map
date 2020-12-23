@@ -1,20 +1,20 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.50.6.265/W32 for ARM                  21/Dec/2020  19:32:04
+# IAR ELF Linker V8.50.6.265/W32 for ARM                  22/Dec/2020  22:36:07
 # Copyright 2007-2020 IAR Systems AB.
 #
 #    Output file  =
-#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\Debug\Exe\project.out
+#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\Debug\Exe\project.out
 #    Map file     =
-#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\Debug\List\project.map
+#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\Debug\List\project.map
 #    Command line =
-#        -f C:\Users\dvanaria\AppData\Local\Temp\EWB02D.tmp
-#        (C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\Debug\Obj\main.o
+#        -f C:\Users\dvanaria\AppData\Local\Temp\EWB128.tmp
+#        (C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\Debug\Obj\main.o
 #        --no_out_extension -o
-#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\Debug\Exe\project.out
+#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\Debug\Exe\project.out
 #        --redirect _Printf=_PrintfFullNoMb --redirect _Scanf=_ScanfFullNoMb
 #        --map
-#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\Debug\List\project.map
+#        C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\Debug\List\project.map
 #        --config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
 #        8.4\arm\config\linker\TexasInstruments\LM4F120H5QR.icf" --semihosting
 #        --entry __iar_program_start --vfe --text_out locale)
@@ -119,7 +119,7 @@ command line/config:
     -------------------------------------------
     Total:
 
-C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\Debug\Obj: [1]
+C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\Debug\Obj: [1]
     main.o                 84       16       16
     -------------------------------------------
     Total:                 84       16       16
@@ -188,7 +188,7 @@ p_set_to_digital        0x2000'0008   0x4  Data  Gb  main.o [1]
 p_set_to_output         0x2000'0004   0x4  Data  Gb  main.o [1]
 
 
-[1] = C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\Debug\Obj
+[1] = C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\Debug\Obj
 [2] = dl7M_tln.a
 [3] = m7M_tls.a
 [4] = rt7M_tl.a

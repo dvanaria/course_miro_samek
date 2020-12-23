@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\settings\project.Debug.general.xcl" --backend -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\settings\project.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\settings\project.Debug.general.xcl" --backend -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\settings\project.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\settings\project.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\embedded_programming\2013_embedded_systems_programming_dr_miro_samek\IAR_EWARM_projects\lesson_4\settings\project.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\settings\project.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\cygwin\home\dvanaria\Dropbox\darron\compsci\sandbox\github_hosted_projects\embedded_programming_course\lesson_4\settings\project.Debug.driver.xcl" 
 }
