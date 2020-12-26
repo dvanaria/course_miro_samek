@@ -1,0 +1,960 @@
+Course: "Modern Embedded Systems Programming Course"
+YouTube Channel: Quantum Leaps, LLC (35 videos)
+Instructor: Miro Samek
+Date: 2013
+Website: www.state-machine.com
+Location: sandbox\courses\2013_embedded_systems_programming_dr_miro_samek
+
+Processor: Cortex-M4F
+Instruction Set Implemented: ARMv7-M Thumb (16 bit instructions)
+Toolset: EWARM (Embedded Workbench for ARM) by a company called IAR Systems
+Evaluation Board: Texas Instruments Tiva LaunchPad (EK-TM4C123GXL)
+                  ARM Cortex-M4F processor
+                  256 K of ROM
+                   32 K of RAM
+                  USB debugger on a chip, also on the board
+                  switches and LED lights
+
+
+    ***************************************************************************
+    INTRO:
+
+    How to program embedded microcontrollers, in C. We'll start by istalling a
+    free embedded development toolset, and ordering a development board (so you
+    can run your code on a real microcontroller). If you don't have a board, 
+    you can follow along with the included instruction set simulator.
+
+    C code is high-level, but we'll frequently step down to the ARM machine
+    code so you can see what is going on inside the embedded processor. This
+    deeper understanding will allow you to use the C language with greater
+    confidence.
+
+    The processor we will use is the ARM Cortext M4F. This will apply to the 
+    entire ARM Cortex-M family of processors:
+
+        Cortex-M0
+        Cortex-M0+
+        Cortex-M1
+        Cortex-M3
+        Cortex-M4   <-- This course uses this processor with the FPU option
+        Cortex-M7
+        Cortex-M23
+        Cortex-M33
+        Cortex-M35P
+        Cortex-M55
+
+    "The ARM Cortext-M cores are optimized for low-cost and energy-efficient 
+     microcontrollers, which have been embedded in tens of billions of 
+     consumer devices. The Cortex-M4 / M7 / M33 / M35P / M55 cores have an FPU
+     silicon option, and when included in the silicon these cores are sometimes
+     known as "Cortex-Mx with FPU" or "Cortex-MxF", where 'x' is the core 
+     number." 
+
+    "Familiarity with ARM Cortext will look really good on your resume. The 
+     Cortext-M family is the most popular embedded microcontroller in use
+     today."
+
+
+    ***************************************************************************
+    THE EMBEDDED TOOLSET [IAR System's Embedded Workbench for ARM (EWARM)]:
+
+    EWARM is the professional IDE and C/C++ Compiler for ARM, an IDE made by 
+    a company called IAR Systems.
+
+    "The ARM IAR Assembler supports the syntax for assembler instructions as
+     described in the ARM Architecture Reference Manual."
+
+    This compiler/IDE is the most expensive on the market, but the free version
+    is perfect because it is size-limited but not time-limited.
+
+    This toolset includes:
+
+        C/C++ compiler
+        editor
+        a nice, embedded debugger
+        assembler
+        instruction set simulator
+
+    Latest EWARM from IAR Systems: Version 8.50, 1467.44 MB
+    
+    Restrictions to the Kickstart, size-limited evaluation:
+        A 32 Kbyte code size limitation
+        Source code for runtime libraries is not included.
+        No support for MISRA C.
+        C-RUN is not available.
+        Limited technical support.
+
+    Installation:
+
+        1. Click on the large, single .exe file to begin.
+
+        2. Click on Register and choose the Size-Limited version.
+
+        3. You'll be emailed a registration code. 9595-122-110-0014
+    
+
+    ***************************************************************************
+    THE DEVELOPMENT BOARD:
+
+        The Stellaris Launchpad board by Texas Instruments.
+
+            USB debugger (built-in)
+            ARM Cortex-M4F processor
+            256 KB of ROM
+            32 KB of SRAM
+            $12.99
+
+
+    ***************************************************************************
+    FIRST PROJECT: LOOP WITH VARIABLE INCREMENT
+
+        Let's look at this project from a high level. We have a little dev
+        board with an ARM processor, which we can load with our own programs
+        to run. 
+
+        There are C compilers available that will compile to ARM architecture.
+
+        Let's start with a very simple program and use a compiler/IDE tools to
+        learn more about how this C code is being translated into ARM assembly
+        language. This will give us great insight into how the ARM processor
+        works, and how C gets translated to ARM's native language.
+
+        Here's the C program:
+
+            int main() {
+                unsigned int counter = 0;
+                while(counter<5) {
+                    ++counter;
+                }
+                return 0;
+            }
+
+        How will this get translated to ARM assembly?
+
+        For starters, we need to get into the processors architecture. The ARM
+        Cortex-M processors have 32-bit registers (a whopping 16 of them).
+
+        These are low-powered and cheap processors intended to be used as 
+        microcontrollers (though compared to other microcontrollers, the ARM
+        Cortex-M chips are super powerful).
+
+        The ARM Cortex-M4 (the processor used on the Texas Instruments 
+        development board used in this series) is based on the Armv7E-M
+        architecture.
+
+        "The Cortex-M microcontrollers are based on the ARMv7 processor and 
+         this processor has a set of internal registers known as a register 
+         bank. This register bank consists of 16 registers ranging from 
+         R0-R15. First 13 registers from R0-12 are general purpose registers
+         and last three from R13-R15 are special function registers."
+
+             R13 = Stack Pointer
+             R14 = Link Register
+             R15 = Program Counter 
+
+        The instruction set architecture used in cortex-M4 is Thumb-2 which 
+        is a mixture of 32 bit ARM instruction set architecture and 16 bit 
+        Thumb instruction set architecture.
+
+        The above C program seems to only require only 1 register to hold
+        the "counter" variable.
+
+        So perhaps some pseudo-code:
+
+                  store 0 in reg0
+        loop:     compare reg0 to 5
+                  jump to end if equal
+                  increment reg0
+                  jump to loop
+        end:      end
+
+        With an IDE, there are quite a few steps and new concepts to get down
+        before being able to follow along with this course (and become 
+        proficient with this tool in general). Its pretty amazing what can be
+        done with this tool though. You'll write C code, and then it will be
+        compiled and you will see exactly how it is converted into ARM 
+        assembly code, what is going on internally in the ARM processor and in
+        main memory, etc.
+
+    ***************************************************************************
+    USING IAR System's "Embedded Workbench for ARM" (EWARM) IDE
+
+        1. Project (menu) -> Create New Project -> C -> main.c
+         
+               Select a location for your project folder. Its best to pick or
+               make a master folder location where you will place each project
+               you create with IAR'S EWARM.
+
+                   embedded_programming_course
+                       lesson_1
+                            project.ewp    (created during this step)
+                            main.c         (created during this step)
+                            settings       (folder)
+                            Debug          (folder)
+
+        2. To finish configuring your project: Project -> Options
+
+               General Options -> Target -> Processor Variant -> Device
+
+                   Texas Instruments -> LM4F -> LM4F120H5QR
+
+        3. Continue with configuration: Project -> Options
+
+               C/C++ Compiler
+
+                   C99 dialect (not available on mine) -> Standard C
+
+                   Optimizations Tab -> Low
+
+        4. Now configure EWARM's IDE to your liking:
+
+               Tools -> Options -> Fonts -> Lucida Console
+
+                                   Editor -> 4 spaces -> spaces instead of tabs
+
+        5. Now lets compile the basic C program:
+
+               Project -> Make    [F7]
+
+               Since this is the first time you are compiling this project,
+               the IDE will ask for the "workspace" name. This creates a .eww
+               file that will be kept (with some other garbage) in the top 
+               level "lesson_1" folder.
+
+        6. Debugging:
+
+               After compiling with F7, if there are any errors, they will show
+               up in the Build window. If you double-click on the error message
+               there, it will bring you to the offending code in the code 
+               editor window.
+
+        7. Before running the program (so far we've just compiled it), make  
+           sure the IDE is set to use the Simulator:
+
+               Options -> Debugger -> Driver -> Simulator
+
+        8. Now run the program:
+
+               Project -> Download and Debug            [Ctrl+D]
+
+        9. Now the IDE has switched to the debugger mode.
+
+               View -> Disassembly
+
+               View -> Memory
+
+               View -> Register
+
+               View -> Locals
+        
+        10. Now rearrange the windows for an optimal view:
+
+               disassembly view = largest + in center view
+               source code (smaller to the left of disassembly)
+               registers (to the right of disassembly)
+               memory (lower 2/3 of window)
+               locals (small box in lower right corner)
+
+               Awesome feature: right-click on the Memory view and set it to 
+                                show x2 view
+
+        11. Notice that all ARM instructions seem to be only 16-bits long,
+            and that the code is loaded into memory location 0x00000000.
+
+        12. Now step through the program. Hi F11 (Step Into) and follow
+            the execution steps and see how they effect register values and
+            memory contents. For Lesson 1, all the code is kept in memory
+            and the variable "counter" is just held in a register.
+
+        13. There is a reset arrow to begin again.
+
+
+    0x2100    MOVS R1, #0           move a byte value (in this case 0) into one
+                                    of the first eight registers (R0 - R7).
+                                    0010 0rrr bbbb bbbb
+                                    0010 0     (instruction MOV immediate mode)
+                                          rrr          (specific register, 0-7)
+                                              bbbb bbbb (byte value 0-255)
+
+    0x1c49    ADDS R1, R1, #1       ADD immediate, T1 Encoding
+                                    add a 3-bit value (0-7) to 
+                                    another register (R0-R7), and then stores
+                                    result into a third register (R0-R7).
+                                    0001 110b bbnn nddd
+                                            b bb (3-bit value 0-7)
+                                                nn n (addend register R0-R7)
+                                                    ddd (destination R0-R7)
+                                    example encoding: 1c49
+                                       0001 1100 0100 1001
+                                       0001 110  (instruction)
+                                               0 01   (immediate 3-bit value)
+                                                   00 1   (Rn)
+                                                       001   (Rd)
+                                             
+    Covered in Lesson 1:
+
+        a. How to set up and use IAR's EWARM IDE
+
+        b. Some particulars about the ARM processor (16 registers, etc) and
+           some preliminary instructions:
+
+               0x2000    MOVS   (move an immediate value into a register)
+               0x1C40    ADDS   (increment a particular reg by 1)
+               0x4770    BX     (branch) 
+
+        c. Hexadecimal notation
+
+               1000   8
+               1001   9 
+               1010   A
+               1011   B
+               1100   C
+               1101   D
+               1110   E
+               1111   F
+
+        d. Useful keyboard shortcuts for the IDE:
+
+               F7       (compile/make)
+               Ctrl+D   (download and run)
+               F11      (step into)
+
+        e. two's compliment to represent signed numbers.
+
+               0111     +7
+               0000      0
+               1000     -8
+
+
+    ***************************************************************************
+    Run your code on real hardware (TI Tiva C-Series LaunchPad)
+
+        1. Stop the debugger if its running (Ctrl + Shift + D)
+
+        2. Go to Project -> Options -> Debugger -> Driver: TI Stellarus
+
+        3. Go to Project -> Options -> Debugger -> Download tab
+                "use flash loader" option checked
+                "verify download" option checked
+           Click OK
+
+        4. Now connect your LaunchPad board to your computer.
+
+
+    ** End of Lecture 1
+
+
+    ***************************************************************************
+    LESSON 2: Flow of Control
+
+        1. Make a copy of the project folder "lesson_1" and then click on the
+           workspace file within it to launch the EWARM IDE (file ends in .eww)
+
+           This is how all the nicely arranged windows can be preserved 
+           between projects.
+
+           Also note here: the reference material for ARM Cortext-M is huge,
+           over 900 pages. There are 3 different "profiles" of architecture,
+           and the one that's focused on here is ARMv7-M (as opposed to ARMv7-A
+           or ARMv7-R).
+
+           Furthermore, there are two different architecture sets: ARM (which 
+           is fixed at 4-bytes per instruction) and Thumb (which supports both
+           16 and 32 bit instructions).
+
+           We are interested in the Thumb version.
+
+        2. The main reference: ARMv7-M Architecture Instruction Set Reference
+
+               p. 99
+
+           This is for the Thumb instruction set specific to ARMv7-M 
+           architecture.
+
+               Perhaps that's worth restating:
+
+               "We are using the Thumb instruction set specific to the 
+                ARMv7-M architecture profile."
+
+               What a mouthful.
+
+        3. One thing Dr. Miro fails to mention in this second video is how he
+           was able to land on the B.N instruction. Whenever I hit F11 to step
+           into the next instruction, it would mysteriously jump over this 
+           branch instruction entirely!
+
+           * The solution:
+
+                 F10 (Step Over)
+
+
+
+    Here is the C code for this lesson:
+
+        int main() {
+
+            int counter = 0;
+
+            while( counter < 5 ) {
+                ++counter;
+            }
+
+            return 0;
+        }
+
+    And here is what the compiler makes of it:
+
+        ADDRESS     CONTENTS
+
+          86          2000
+          88          e000
+          8a          1c40
+          8c          2805
+          8e          dbfc
+          90          2000
+          92          4770
+
+    And here's the same listing with some corresponding assembler:
+
+        ADDRESS     CONTENTS       ASSEMBLY
+
+          86          2000           MOV        (move this # to this register)
+                                                   0 -> R0
+          88          e000           B          (unconditional jump)
+                                                   to address 8c (not sure how)
+          8a          1c40           ADD        (add this # to this register)
+          8c          2805           CMP        (subtract this # from this reg,
+                                                 set zero flag if equal)
+                                                   R0 - 5 = -5, so zero flag 
+                                                                not set
+          8e          dbfc           BLT        (jump if less than)
+                                                    1101 encodes opcode B
+                                                    1011 encodes condition: 
+                                                        BLT (branch less than)
+                                                    1111 1100 = -4
+                                                        jump back 4
+          90          2000           MOV        (move this # to this register)
+          92          4770           BX         
+  
+
+
+    ** Note: ARMv7-M only supports the Thumb instruction set.
+
+
+    Some interesting notes:
+
+        1. The compiler sets up the loop a little differently, by moving the
+           conditional jump to the end of the loop, thus eliminating one 
+           test from the code. This could make a difference in time-critical
+           programs (such as interrupt handlers) because a conditional jump
+           causes the instruction pipeline to stall for a few cycles.
+
+        2. Miro Samek adds an if statement toward the end of lesson 2 as a way
+           to introduce this C language construct. He shows this by using an
+           if statement to test if a value is odd or even, in a way that I 
+           I think is pretty clever:
+ 
+               if( (counter & 1) != 0)
+
+           So he uses a bitwise AND against the number in question. The result
+           will only be 0  or 1. It will only be 0 if the last bit in the 
+           counter variable is a 0 (in other words, if counter is even).
+
+    Review on IDE controls:
+
+        F7 to compile
+      
+        Ctrl+D to load and run program (remember to set target first)
+
+        F10 to step through program
+
+    Review of setting target:
+
+        Project -> Options -> Debugger -> Driver (drop-down)
+
+            Driver -> Simulator
+
+                or
+
+            Driver -> TI Stellarus
+            Download -> Use Flash Loaders (checked)
+
+    ***************************************************************************
+    LESSON 3: Variables and Pointers
+
+        Any variable declared locally within a function will be kept in a CPU
+        register. To see which register a local has been assigned to, you can
+        open the Locals window in the IDE.
+
+        If we move the variable outside of function, it becomes a global 
+        variable. To see it in the IDE, you'll need to go to
+
+            View -> Watch -> (type in the name of the variable to track)
+
+        You'll now see a memory address instead of a register as the location
+        of the variable (which is now treated with global scope).
+
+        This Texas Instruments board, the Tiva C Series LaunchPad, has its
+        start of RAM memory at 0x20000000.
+
+        This means, in the Memory window in the IDE, you can see the actual
+        value stored at this memory location. It will help to switch to 4x
+        view, so it shows 32-bit values assembled together (it basically 
+        translates each group of 4 bytes as a signed,  32-bit integer).
+
+        The interesting thing is that the address of this global variable
+        is kept in a CPU register. You can see in the disassembly code that
+        the instructions are dereferencing this address to access that part
+        of memory:
+
+            LDR    R1, [R0]
+            ADDS   R1, R1, #1
+            STR    R1, [R0]
+
+        So ARM processors use RISC machines, which means that not only is the
+        instruction set deal with very descrete, simple instructions, but it 
+        also uses a load-store mechanism when it comes to accessing and 
+        modifying main memory.
+
+        Any memory value you wish to access and/or alter must first be loaded
+        into a CPU register to be read. Then, if you wish to modify that value,
+        you would modify the copy in the register, then it would be stored 
+        back at the original memory location.
+
+        When did R0 get loaded with the address of the counter variable?
+
+            LDR.N   R0, [PC, #0x8]
+
+   
+        Pointers:
+
+            You can use a pointer locally to access global variables. This will
+            have the effect of simplifying the compiled code and thus improving
+            efficiency:
+
+            main() {
+
+                int *p_counter = &counter;
+               
+                while(*p_counter < 21) {
+                    ++(*p_counter);
+                }
+
+            }
+
+    
+        The Real Power of Pointers?
+
+            You can assign ANY address to a pointer, effectively accessing any
+            part of memory. This is how we are going to control things like
+            blinking LEDs on the Stellarus LaunchPad.
+
+            Example:
+            
+                p_counter = (int *)0x20000002;
+
+            So you have to cast the 32-bit value to a type (int *).
+
+
+
+    ***************************************************************************
+    LESSON 4:
+
+        Blinking the LED on the LaunchPad board.
+
+        Download the datasheet for the MCU on your Stellarus LaunchPad board.
+        A large part of being an Embedded Programmer is learning your way 
+        around these monster datasheets (this one is 1200 pages long, and that
+        is considered short). 
+
+        Review:
+
+            The red board: Texas Instruments EK-TM4C123GXL
+
+            MCU (the actual microcontroller): TM4C123GH6PM
+                in common language, you would say "an ARM Cortex-M4F based
+                      microcontroller" or even just "ARM Cortext-M"
+
+                "The TM4C123GH6PM is a 32-bit ARM Cortex-M4-based 
+                 microcontroller with 256-kB Flash memory, 32-kB SRAM, and 
+                 80-MHz operation; USB host, device, and OTG connectivity; 
+                 a Hibernation module and PWM; and a wide range of other 
+                 peripherals."
+
+        Documentation needed for this lesson:
+
+            1. The datasheet for the specific micro-controller on your board:
+
+                   TM4C123GH6PM_Data_Sheet.pdf (1410 pages)
+
+            2. The user manual for the red board (the Dev Board):
+
+                   TM4C123G_User_Manual.pdf (27 pages)
+
+
+
+    This lesson will write values to specific areas of the microcontroller's
+    memory map (much like the old days POKE statements directly altering the
+    Commodore 64's devices like the SID chip).
+
+    The values written will allow us to control the on-board LED and let us
+    test running code directly on the board itself (as opposed to the simulator
+    in the IDE).
+
+    The User Manual (the 27 page PDF) will give us more information about 
+    how to access the LED. On page 9 it shows the individual GPIO pin labels
+    for the Red, Green, and Blue signals:
+
+        PF1  -> RGB LED Red
+        PF2  -> RGB LED Blue
+        PF3  -> RGB LED Green
+
+    The "F" in the pin assignments above stands for GPIO-F (apparently there
+    are many, many sets of GPIO pins).
+
+    Connect the LaunchPad board to your PC (Setup Review):
+
+        1. Connect USB cord. 
+
+        2. In the "IAR Embedded Workbench" IDE select Project -> Options ->
+               Debugger -> 
+ 
+                    Setup (tab) -> Driver (dropdown) = TI Stellaris
+
+                    Download (tab) -> "Use flash loaders" (checked)
+
+        3. After hitting OK for step 2 (above), a new menu should appear:
+
+               TI Stellaris -> Reset Will Do System Reset (checked)
+
+        4. Finally, Project -> Rebuild All (to prevent the IDE from pulling in
+           the source code from the old project)
+
+    The Microcontroller Data Sheet gives the details of the memory map and 
+    where to find the register(s) to write to those pins:
+
+        searching "memory map" highlights Table 2-4 on page 92. You can click
+        on this in the table of contents and the PDF system will take you to
+        that page.
+
+        This is also a good time to start the debugger in the IDE so you can
+        see these memory locations and what they contain (Ctrl+D)
+
+            CODE 0x0000.0000  Flash RAM, program code goes here
+                             This code is retained after power-off
+                 0x0003.FFFF  end of Flash RAM (so 256 KB)
+
+            RAM  0x2000.0000  External or global data/variables
+                 0x2000.7FFF  End of RAM (so this is a 32 KB RAM space,
+                                         because FFFF would be 64 KB)
+
+                 0x2000.8000  Next available address after RAM
+
+    GPIO Port F  0x4002.5000   GPIO Port F
+                 0x4002.5FFF   (4096 bytes, or 4 K)
+    
+
+    Copy that starting location to the IDE's memory viewer and see what is 
+    there to start with. If there is nothing (--- lines), it may be because
+    that particular block of hardware is disabled by default, to save power.
+
+    To enable that block of hardware, we need to look into "Clock Gating"
+    it on. Search the manual for that term.
+
+    In that section (System Control Registers, pp. 212 to 484) which it finds
+    the term clock gating, look at some of the registers described there (there
+    are a total of 144 System Control registers). You should find one called
+    "General Purpose IO Run Mode Clock Gating Control: RCGCGPIO" at offset
+    0x608. This is Register 60.
+
+        In that section of the Data Sheet, p. 340, you'll find every bit of 
+        Register 60s 32-bits described:
+
+            bit 0
+            bit 1
+            bit 2
+            bit 3
+            bit 4
+            bit 5    <--- GPIO Port F Run Mode Clock Gating Control
+                          0 = disabled
+                          1 = enable block
+
+        What is the exact address of this register? At the top of that page in
+        the data sheet you'll see the base and offset
+                   Base 0x400F.E000
+                   Offset 0x608
+                   Type RW, reset
+
+        So the exact address is 0x400F.E608 and we need to write a 1 to bit 5,
+        which would be decimal 32 (100000). In hex, 32 would be 20.
+
+    To set the memory content directly through the IDE, you'll need an 
+    additional view: View -> Symbolic Memory
+
+        Now you can type in 0x00000020 into that memory location.
+
+    Now in the regular Memory view, you'll see the hardware block for GPIO-F
+    wakes up! Now starting at 4002.5000 you should see all 0's.
+
+    To program the LED, there are really 4 steps:
+
+        1. Set 400F.E608 to 0x00000020 (this enables the hardware block)
+
+        2. Set 4002.5400 to 0x0000000E (set all GPIO pins for port F to OUT)
+
+        3. Set 4002.551C to 0x0000000E (set to digital output)
+
+        4. Set bits at 4002.53FC:   0x00000002 -> red
+                                    0x00000004 -> blue
+                                    0x00000008 -> green
+
+    All these addresses were found with some digging in the Data Sheet. The
+    first two (addresses at step 2 and 3 above) are the Direction Register and
+    the Output Type Register.
+ 
+    The final register (0x4002.53FC) needs some explaining:
+
+        There are 255 Data Regesters available on the board, starting at 
+        offset 0x000, then 0x004, then 0x008, all the way to 0x3FC. That last
+        register controls the data to the pins we need for the LED.
+
+    Now all the heavy lifting is done (i.e., figuring out how to configure and
+    write to the LED ports, and what those addresses are). Now it should be
+    fairly easy to translate all this into a C program.
+
+    
+    So, let's write a C program to control the LED:
+
+        1. Write 0x20 to address 400F.E608 (enable the GPIO hardware block).
+
+        2. Write 0xE to address 4002.5400 (set pins to OUTPUT mode).
+
+        3. Write 0xE to address 4002.551C (set pins to digital mode).
+
+        4. Write to address 4002.53FC (1 = on, 0 = off)
+                red -> 0x2   (bit 1)
+                blue -> 0x4  (bit 2)
+                green -> 0x8 (bit 3)
+
+
+    One important note about the code: you actually don't need pointer
+    variables at all. You can directly de-reference the pointer casts:
+
+        *((int *)0x400253FC) = 0x02;
+
+    That would set the LED to turn red! No need for the p_LED_control variable
+    (or any of the pointer variables actually).
+
+    It would certainly make the compiled code more efficient and take up less
+    space.
+
+
+    ***************************************************************************
+    LESSON 5: Using the Preprocessor and volatile
+
+        The preprocessor does simple text-substitution, so it can be used to
+        name our registers instead of using magic numbers:
+
+            #define RCGCGPIO (*((unsigned int *)0x400FE608U))
+
+        Notice that its just safe practice to wrap the entire substitution in
+        parenthesis so no unexpected behavior happens when substituted. In the
+        above code, RCGCGPIO always translates to de-referencing a pointer.
+
+        Now you can write values to the register in a much cleaner fashion:
+
+             RCGCGPIO = 0x20U;
+
+        Using the pre-processor in this way is called defining a "macro" 
+        (pronounced like MACbook pRO).
+
+        Miro Samek define a base address macro, as well as macros for each of
+        the three key registers in the "blinking LED" program:
+
+            #define GPIOF_BASE 0x40025000U
+            #define GPIOF_DIR  (*((unsigned int *)(GPIOF_BASE + 0x400U)))
+            #define GPIOF_DEN  (*((unsigned int *)(GPIOF_BASE + 0x51CU)))
+            #define GPIOF_DATA (*((unsigned int *)(GPIOF_BASE + 0x3FCU)))
+
+        Also, you can see with the dissassembler that the compiler will 
+        fold any constants computable at compile time before-hand, so the
+        above macros (with adding a base address) do not introduce any 
+        overhead.
+        
+        So with these 3 key registers (and the clock gating enable register
+        RCGCGPIO to enable the LED area of the board), much cleaner code
+        can be written (using the macros).
+
+    (note: to "run" the program without reference to where the cursor is in
+           the IDE, press the Go button).
+
+    Not suprisingly, the microcontroller manufacturer (Texas Instruments in
+    this case) supplies a header file with all these macros already defined.
+
+    For the microcontroller for the dev board "Tiva C Series LaunchPad", the
+    header file is called: tm4c123gh6pm.h
+
+    You can add that file to your project (both by copying the file into the
+    project file using Windows, and then by Adding the file to the project
+    in the IDE).
+
+    Once the header is #included your source code, you can refer to the 
+    registers by the name the vendor has specified:
+
+          SYSCTL_RCGCGPIO_R 
+          GPIO_PORTF_DIR_R  
+          GPIO_PORTF_DEN_R  
+          GPIO_PORTF_DATA_R 
+
+    It is interesting to see how these macros have been defined by the vendor:
+
+         #define SYSCTL_RCGCGPIO_R   (*((volatile unsigned long *)0x400FE608))
+
+    This is the same (long is the same as int, both 32-bits, for the ARM 
+    Cortex-M family). But what about that keyword "volatile"?
+
+    
+    VOLATILE
+
+    A memory location marked "volatile" tells the compiler that the data 
+    contained in these locations MAY CHANGE EVEN THOUGH THERE IS NO PLACE IN
+    THIS CODE THAT MAKES ANY CHANGES TO IT (there may be user switches that
+    the user can move during the program operation that directly alter the
+    contents of that memory, for example.)
+
+    For instance, the compiler may try to optimize by pulling data from a 
+    memory location into a register for a while, doing all its work on the
+    register copy, and then writing it all out later to that memory location.
+
+    By marking an address as volatile, THE COMPILER IS NOT ALLOWED TO MAKE
+    THIS OPTIMIZATION. Any time code reads/writes that address, it must 
+    happen immediately, when it says to in the code, and that address must
+    be immediately updated if any modifications are made.
+
+    
+    You can control the optimization levels through the IDE. And if you 
+    turn it up too high, it will even optimize those "for" loops (that do
+    nothing in this code except count up to 1,000,000) and remove them
+    completely!
+
+    To prevent this, you can use the volatile keyword!
+
+    Try it and turn up optimization:
+
+        Project -> Options -> Compiler -> Optimizations
+
+    Load it into the board, and you'll see the LED doesn't blink. But modify
+    the line:     int volatile counter = 0;    and it will blink again.
+
+    ***************************************************************************
+    LESSON 6: controlling RGB lights independently as a way to learn about 
+              bitwise operators in C
+
+        I love this low level, binary number representation of computers. This
+        touches on why I love delving into the Commodore 64 so much. Its how
+        it all works at the lowest levels.
+
+        There are 6 key bitwise operators in C:
+
+            c = a | b (bitwise OR)..............................OR    ORRS.W
+            c = a & b (bitwise AND).............................AND   ANDS.W
+            c = a ^ b (bitwise Exclusive OR)....................XOR   EORS.W
+            c = ~b    (bit inversion, or "one's complement")....NOT   MVNS
+            c = b >> 1  (right shift)                                 LSRS
+            c = b << 3k  (left shift)                                 LSLS
+
+    The IDE can be used to see the binary effect on each variable. These are 
+    32-bit variables, and in the Locals view you can r-click and set each 
+    variable to show in Binary Format.
+
+    The real key thing to understand about all of these operations: they work
+    on each pair of bits independently, without regard to carry, etc.
+
+    The exception is the right and left shifts. These have some interesting
+    effects:
+
+        1. Left shifting is like multiplying by 2 each time. So in decimal,
+           if we start with a number like 12, left shifting it should result
+           in 24. Left shifting again should result in 48, etc.
+
+           To accomodate this, zeros will be filled in with each successive
+           shift to the left.
+
+           The ARM instruction is:
+
+               LSLS (Logical Shift - Left Shift)
+
+        2. Right shifting, on the other hand, is like dividing by 2 each time,
+           and if we are dealing with unsigned numbers, zeros will be filled
+           in (on the extreme left hand side, the most-significant bit).
+
+           The ARM instruction is:
+
+               LSLS (Logical Shift - Right Shift)
+
+        So to remember:
+            LEFT SHIFTING = MULTIPLYING BY 2
+            RIGHT SHIFTING = DIVIDING BY 2
+
+    What happens with signed numbers? These are handled differently by the 
+    compiler and it brings the notion of "logical shift" vs. "arithmatic shift"
+
+    You can add some code to test out how signed numbers are handled 
+    differently:
+
+        int x = 1024;
+        int y = -1024;
+        int z;
+
+        z = x >> 3;
+        z = y >> 3;
+
+    You'll see that this compiles to replacing the Logical shift operations
+    (LSRS) with a different operation, ASRS. This stands for Arithmetic Shift,
+    Right Shift. The difference is this:
+
+        1. If the number is positive (0 is in the most significant bit), than
+           more zeros will be filled in as the number is bit shifted to the 
+           right. This is just like how unsigned numbers are handled.
+
+        2. If the number is negative (1 is in the most significant bit), then
+           1s are filled in as the number shifts to the right! This is called
+           "sign extension" and it preserves the behavior of "dividing by 2" 
+           with each successive bit shift to the right, even when dealing with
+           negative numbers that are encoded using the 2s-compliment notation!
+
+
+    Now we can use these bit shifting ideas to define some macros that are 
+    easy to read when dealing with specific bit-locations in a bit 32-bit 
+    number. Something like this:
+
+        #define LED_RED   (1U << 1)
+        #define LED_BLUE  (1U << 2)
+        #define LED_GREEN (1U << 3)
+
+    These get computed during the pre-compile step, and are a much safer 
+    alternative to figuring out that "bit 18" corresponds to 0x20000 in binary,
+    for example.
+         
+    We can also use the other bit operations to do things like modify one bit
+    in a register without disturbing the other bits in the regestier. For 
+    example, maybe we want to toggle the red LED on and off, whithout 
+    disturbing the blue LED (which has been on since the beginning). For this,
+    we can use the OR operator (as long as the register in question has both
+    read/write permissions, and the GPIO pin we are accessing does in fact have
+    both of these permissions enabled).
+
+        GPIO_PORTF_DATA_R = GPIO_PORTF_DATA_R | LED_RED;
+
+    This is the coding idiom for "setting a bit" in C. In fact, its usually 
+    done in the more succinct form:
+
+        GPIO_PORTF_DATA_R |= LED_RED;
+
+    This is exactly how a += 1 works. If the left hand side is used as the 
+    first variable in the right hand side, you can use this notation.
+
+    This is the coding idiom for "clearing a bit" in C is a bit different,
+    as it uses both the AND bitwise operator and the NOT operator:
+
+        GPIO_PORTF_DATA_R &= ~LED_RED;
